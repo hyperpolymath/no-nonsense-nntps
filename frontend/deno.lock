@@ -1,0 +1,99 @@
+{
+  "version": "5",
+  "specifiers": {
+    "npm:@rescript/react@0.13": "0.13.1_react@18.3.1_react-dom@18.3.1__react@18.3.1",
+    "npm:react-dom@^18.3.1": "18.3.1_react@18.3.1",
+    "npm:react@^18.3.1": "18.3.1",
+    "npm:rescript@*": "12.1.0",
+    "npm:rescript@^12.1.0": "12.1.0"
+  },
+  "npm": {
+    "@rescript/darwin-arm64@12.1.0": {
+      "integrity": "sha512-OuJMT+2h2Lp60n8ONFx1oBAAePSVkM9zl7E/EX4VD2xkQoVTPklz0BpHYOICnFJSCOOdbOhbsTBXdLpo3yvllg==",
+      "os": ["darwin"],
+      "cpu": ["arm64"]
+    },
+    "@rescript/darwin-x64@12.1.0": {
+      "integrity": "sha512-r5Iv4ga+LaNq+6g9LODwZG4bwydd9UDXACP/HKxOfrP9XQCITlF/XqB1ZDJWyJOgJLZSJCd7erlG38YtB0VZKA==",
+      "os": ["darwin"],
+      "cpu": ["x64"]
+    },
+    "@rescript/linux-arm64@12.1.0": {
+      "integrity": "sha512-UTZv4GTjbyQ/T5LQDfQiGcumK3SzE1K7+ug6gWpDcGZ7ALc7hCS6BVEFL/LDs8iWVwAwkK/6r456s2zRnvS7wQ==",
+      "os": ["linux"],
+      "cpu": ["arm64"]
+    },
+    "@rescript/linux-x64@12.1.0": {
+      "integrity": "sha512-c0PXuBL09JRSA4nQusYbR4mW5QJrBPqxDrqvIX+M79fk3d6jQmj5x4NsBwk5BavxvmbR/JU1JjYBlSAa3h22Vg==",
+      "os": ["linux"],
+      "cpu": ["x64"]
+    },
+    "@rescript/react@0.13.1_react@18.3.1_react-dom@18.3.1__react@18.3.1": {
+      "integrity": "sha512-VIWtu/sAJyYmDVoAhit0LHDYQrW6RqZ6z8sh8san5cjEAT4klv8JWkiaSK3FGUfooUDkGUXXgKTkqyj8zRR21w==",
+      "dependencies": [
+        "react",
+        "react-dom"
+      ]
+    },
+    "@rescript/runtime@12.1.0": {
+      "integrity": "sha512-bvr9RfvBD+JS/6foWCA4l2fLXmUXN0KGqylXQPHt09QxUghqgoCiaWVHaHSx5dOIk/jAPlGQ7zB5yVeMas/EFQ=="
+    },
+    "@rescript/win32-x64@12.1.0": {
+      "integrity": "sha512-nQC42QByyAbryfkbyK67iskipUqXVwTPCFrqissY4jJoP0128gg0yG6DydJnV1stXphtFdMFHtmyYE1ffG7UBg==",
+      "os": ["win32"],
+      "cpu": ["x64"]
+    },
+    "js-tokens@4.0.0": {
+      "integrity": "sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ=="
+    },
+    "loose-envify@1.4.0": {
+      "integrity": "sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==",
+      "dependencies": [
+        "js-tokens"
+      ],
+      "bin": true
+    },
+    "react-dom@18.3.1_react@18.3.1": {
+      "integrity": "sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==",
+      "dependencies": [
+        "loose-envify",
+        "react",
+        "scheduler"
+      ]
+    },
+    "react@18.3.1": {
+      "integrity": "sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==",
+      "dependencies": [
+        "loose-envify"
+      ]
+    },
+    "rescript@12.1.0": {
+      "integrity": "sha512-n/B43wzIEKV4OmlrWbrlQOL4zZaz0RM/Cc8PG2YvhQvQDW7nscHJliDq1AGeVwHoMX68MeaKKzLDOMOMU9Z6FA==",
+      "dependencies": [
+        "@rescript/runtime"
+      ],
+      "optionalDependencies": [
+        "@rescript/darwin-arm64",
+        "@rescript/darwin-x64",
+        "@rescript/linux-arm64",
+        "@rescript/linux-x64",
+        "@rescript/win32-x64"
+      ],
+      "bin": true
+    },
+    "scheduler@0.23.2": {
+      "integrity": "sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==",
+      "dependencies": [
+        "loose-envify"
+      ]
+    }
+  },
+  "workspace": {
+    "dependencies": [
+      "npm:@rescript/react@0.13",
+      "npm:react-dom@^18.3.1",
+      "npm:react@^18.3.1",
+      "npm:rescript@^12.1.0"
+    ]
+  }
+}
