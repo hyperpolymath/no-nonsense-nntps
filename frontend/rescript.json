@@ -1,0 +1,27 @@
+{
+  "name": "no-nonsense-nntps-frontend",
+  "version": "0.1.0",
+  "sources": [
+    {
+      "dir": "src",
+      "subdirs": true
+    }
+  ],
+  "package-specs": [
+    {
+      "module": "es6",
+      "in-source": false,
+      "suffix": ".res.mjs"
+    }
+  ],
+  "bs-dependencies": [
+    "@rescript/react"
+  ],
+  "jsx": {
+    "version": 4,
+    "mode": "automatic"
+  },
+  "bsc-flags": [
+    "-open RescriptCore"
+  ]
+}

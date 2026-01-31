@@ -301,7 +301,7 @@ defmodule NoNonsenseNntps.Client do
 
           # Dot-stuffed line (remove leading dot)
           String.starts_with?(line, "..") ->
-            read_multiline_response(socket, [String.slice(line, 1..-1) | acc])
+            read_multiline_response(socket, [String.slice(line, 1..-1//-1) | acc])
 
           true ->
             read_multiline_response(socket, [line | acc])

@@ -1,0 +1,14 @@
+{
+  "tasks": {
+    "build": "deno run -A npm:rescript",
+    "watch": "deno run -A npm:rescript -w",
+    "clean": "deno run -A npm:rescript clean",
+    "serve": "deno run -A jsr:@std/http/file-server --port 8000 ."
+  },
+  "imports": {
+    "rescript": "npm:rescript@^12.1.0",
+    "@rescript/react": "npm:@rescript/react@^0.13.0",
+    "react": "npm:react@^18.3.1",
+    "react-dom": "npm:react-dom@^18.3.1"
+  }
+}

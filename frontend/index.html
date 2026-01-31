@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>No-Nonsense NNTPS Reader</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #1a1a1a;
+      color: #e0e0e0;
+      line-height: 1.6;
+    }
+
+    #root {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #4a9eff;
+      margin-bottom: 20px;
+    }
+
+    .connection-form {
+      background: #2a2a2a;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .connection-form input {
+      background: #1a1a1a;
+      border: 1px solid #444;
+      color: #e0e0e0;
+      padding: 8px 12px;
+      border-radius: 4px;
+      margin-right: 10px;
+      font-size: 14px;
+    }
+
+    button {
+      background: #4a9eff;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    button:hover {
+      background: #3a8eef;
+    }
+
+    button:disabled {
+      background: #555;
+      cursor: not-allowed;
+    }
+
+    .article {
+      background: #2a2a2a;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+
+    .article-header {
+      border-bottom: 1px solid #444;
+      padding-bottom: 15px;
+      margin-bottom: 15px;
+    }
+
+    .article-header dt {
+      color: #888;
+      font-size: 12px;
+      text-transform: uppercase;
+      margin-top: 8px;
+    }
+
+    .article-header dd {
+      color: #e0e0e0;
+      margin-bottom: 4px;
+    }
+
+    .article-body {
+      white-space: pre-wrap;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+    }
+
+    .status {
+      padding: 8px 12px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    .status.connected {
+      background: #2a4a2a;
+      color: #6eff6e;
+    }
+
+    .status.disconnected {
+      background: #4a2a2a;
+      color: #ff6e6e;
+    }
+
+    .status.connecting {
+      background: #4a4a2a;
+      color: #ffe66e;
+    }
+
+    .error {
+      background: #4a2a2a;
+      color: #ff6e6e;
+      padding: 12px;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="./lib/es6/src/Index.res.mjs"></script>
+</body>
+</html>
