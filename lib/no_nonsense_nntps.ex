@@ -22,11 +22,30 @@ defmodule NoNonsenseNntps do
   - **Security Stack**: Svalinn (auth), Vörðr (runtime), Cerro Torre (provenance), Selur (IPC).
   """
 
+  use Application
+  require Logger
+
   @doc """
   Returns version information for no-nonsense-nntps.
   """
   def version do
     {:ok, vsn} = :application.get_key(:no_nonsense_nntps, :vsn)
     List.to_string(vsn)
+  end
+
+  @impl true
+  def start(_type, _args) do
+    port = String.to_integer(System.get_env("PORT") || "4000")
+
+    children = [
+      # Client manager
+      {NoNonsenseNntps.ClientManager, []},
+      # HTTP server
+      {Bandit, plug: NoNonsenseNntps.API, scheme: :http, port: port}
+    ]
+
+    opts = [strategy: :one_for_one, name: NoNonsenseNntps.Supervisor]
+    Logger.info("Starting no-nonsense-nntps HTTP API on port #{port}")
+    Supervisor.start_link(children, opts)
   end
 end

@@ -18,14 +18,22 @@ defmodule NoNonsenseNntps.MixProject do
 
   def application do
     [
-      extra_applications: [:logger, :ssl, :crypto]
+      extra_applications: [:logger, :ssl, :crypto],
+      mod: {NoNonsenseNntps, []}
     ]
   end
 
   defp deps do
     [
-      # NNTPS client will need SSL/TLS support
+      # HTTP server
+      {:bandit, "~> 1.5"},
+      {:plug, "~> 1.16"},
+      {:cors_plug, "~> 3.0"},
+
+      # JSON encoding/decoding
       {:jason, "~> 1.4"},
+
+      # Telemetry and logging
       {:telemetry, "~> 1.0"}
     ]
   end
