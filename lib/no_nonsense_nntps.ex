@@ -1,32 +1,24 @@
 # SPDX-License-Identifier: PMPL-1.0-or-later
+
 defmodule NoNonsenseNntps do
   @moduledoc """
-  No-Nonsense NNTPS - Modern, secure newsgroup reader.
+  No-Nonsense NNTPS — Verified, secure Usenet client.
 
-  A next-generation NNTPS (Network News Transfer Protocol over TLS) client
-  built on formally verified components and the hyperpolymath verified
-  container ecosystem.
+  This application implements a modern NNTP client that mandates TLS encryption 
+  (NNTPS) and leverages formally verified components for critical logic.
 
-  ## Features
-
-  - **Security-First**: Only supports NNTPS (TLS-encrypted). No insecure NNTP.
-  - **Formally Verified**: Built on proven library (Idris2) for unbreakable URL parsing.
-  - **Modern Content**: Supports multiple article formats (plain text, HTML, Markdown, rich media).
-  - **Verified Stack**: Integrates with Svalinn, Vörðr, Cerro Torre, and Selur.
-  - **Type-Safe UI**: ReScript TEA frontend with cadre-tea-router.
-
-  ## Architecture
-
-  - **Elixir Backend**: GenStateMachine for connection management, fault tolerance.
-  - **ReScript Frontend**: TEA (The Elm Architecture) for predictable UI.
-  - **Security Stack**: Svalinn (auth), Vörðr (runtime), Cerro Torre (provenance), Selur (IPC).
+  ## Architecture Pillars
+  1. **Security**: Mandatory TLS and integration with the Svalinn auth stack.
+  2. **Reliability**: GenStateMachine for robust connection and retry logic.
+  3. **Verification**: Uses Idris2-based URL and protocol parsers to eliminate
+     common parsing vulnerabilities.
   """
 
   use Application
   require Logger
 
   @doc """
-  Returns version information for no-nonsense-nntps.
+  Returns the current version from the application specification.
   """
   def version do
     {:ok, vsn} = :application.get_key(:no_nonsense_nntps, :vsn)
@@ -35,17 +27,19 @@ defmodule NoNonsenseNntps do
 
   @impl true
   def start(_type, _args) do
+    # CONFIGURATION: Determine port from env or default to 4000.
     port = String.to_integer(System.get_env("PORT") || "4000")
 
+    # SUPERVISION TREE:
+    # 1. ClientManager: Tracks active newsgroup connections and sessions.
+    # 2. Bandit: High-performance HTTP/1.1 and HTTP/2 server for the UI API.
     children = [
-      # Client manager
       {NoNonsenseNntps.ClientManager, []},
-      # HTTP server
       {Bandit, plug: NoNonsenseNntps.API, scheme: :http, port: port}
     ]
 
     opts = [strategy: :one_for_one, name: NoNonsenseNntps.Supervisor]
-    Logger.info("Starting no-nonsense-nntps HTTP API on port #{port}")
+    Logger.info("Starting no-nonsense-nntps secure gateway on port #{port}")
     Supervisor.start_link(children, opts)
   end
 end

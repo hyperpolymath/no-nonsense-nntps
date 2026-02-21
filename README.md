@@ -19,3 +19,8 @@ Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_do
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at <https://hexdocs.pm/no_nonsense_nntps>.
 
+
+
+## Architecture
+
+See [TOPOLOGY.md](TOPOLOGY.md) for a visual architecture map and completion dashboard.
