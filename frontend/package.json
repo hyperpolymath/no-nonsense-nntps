@@ -6,7 +6,7 @@
     "@rescript/react": "^0.13.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "rescript": "^12.1.0"
+    "rescript": "^12.0.0"
   },
   "scripts": {
     "build": "rescript",
