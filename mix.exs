@@ -50,7 +50,7 @@ defmodule NoNonsenseNntps.MixProject do
       name: "no_nonsense_nntps",
       licenses: ["PMPL-1.0-or-later"],
       links: %{"GitHub" => "https://github.com/hyperpolymath/no-nonsense-nntps"},
-      maintainers: ["Jonathan D.A. Jewell <jonathan.jewell@open.ac.uk>"]
+      maintainers: ["Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>"]
     ]
   end
 end

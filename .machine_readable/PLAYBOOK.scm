@@ -30,5 +30,5 @@
        (hypatia-security-finding . "security-vulnerability-detected")
        (selur-ipc-degradation . "ipc-performance-warning")))
     (contacts
-      ((maintainer . "Jonathan D.A. Jewell <jonathan.jewell@open.ac.uk>")
+      ((maintainer . "Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>")
        (repository . "https://github.com/hyperpolymath/no-nonsense-nntps")))))
