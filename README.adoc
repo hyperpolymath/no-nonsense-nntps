@@ -3,235 +3,298 @@
 :toclevels: 3
 :sectnums:
 
-A secure, modern NNTP reader for serious text discussion, mailing-list archives, and classic Netnews infrastructure.
+A secure, local-first, thread-first NNTPS reader for people who still want durable discussion without the noise, clutter, and unsafe defaults of aging clients.
 
-No-Nonsense NNTPS is a local-first client for reading newsgroups and NNTP-accessible archives over encrypted transport. It is designed for people who still value threaded discussion, durable archives, offline reading, and protocols that do one thing well.
+[NOTE]
+====
+No-Nonsense NNTPS is intentionally *NNTPS-only*.
 
-The goal is not to reinvent Netnews.
-The goal is to make it usable, safe, and pleasant again.
+Plaintext NNTP is not supported.
+There is no insecure fallback mode.
+====
+
+== Overview
+
+No-Nonsense NNTPS is a modern reader for Network News Transfer Protocol over TLS.
+
+It is built for people who still value structured conversation, predictable tooling, local control, and software that does one job well. The aim is not to reinvent Usenet as a social platform, nor to build a protocol museum piece. The aim is to deliver a serious, comprehensible client with sane security defaults, excellent thread handling, durable local state, and a reading experience that respects long-form discussion.
+
+This project is developed within the broader hyperpolymath ecosystem, but it is first and foremost a usable NNTPS reader.
 
 == Why This Exists
 
-NNTP still matters in a handful of places:
+NNTP is old, but the underlying use cases are still real:
 
-* traditional Usenet and private news servers
-* mirrored mailing-list archives
-* long-lived technical discussion systems
-* text-first communities that value threading over feeds
+* long-lived threaded discussion
+* archive-oriented reading
+* text-first technical communities
+* private or public news servers
+* users who want control over local state instead of surrendering everything to a browser tab or feed algorithm
 
-Most existing clients are either old, awkward, or built around assumptions that no longer feel acceptable.
+Many existing clients are either:
 
-No-Nonsense NNTPS is an attempt to provide:
+* capable but visibly dated, awkward, or insecure by modern expectations
+* modern-looking but shallow, incomplete, or overly web-shaped
 
-* secure-by-default transport
-* a modern reader experience
-* strong standards compatibility
-* good offline behaviour
-* clean interoperability with existing NNTP/NNTPS systems
+No-Nonsense NNTPS exists to offer another path:
+
+* *secure by default*
+* *thread-first rather than feed-first*
+* *local-first rather than session-fragile*
+* *pleasant for heavy readers*
+* *boring in the best possible way*
 
 == Design Principles
 
-=== Secure by Default
+=== Security First
 
-This client supports encrypted NNTP transport only.
+The client speaks NNTPS only.
 
-Plaintext NNTP is intentionally out of scope.
-If a server cannot speak secure NNTP, this client will not connect to it.
+No insecure NNTP fallback.
+No “allow plaintext just this once” checkbox.
+No pretending transport security is optional.
 
-=== Standards First
+=== Threads Matter
 
-No-Nonsense NNTPS aims to be a serious client for existing NNTP infrastructure, not a replacement protocol and not a partial toy implementation.
+Discussion is treated as a tree, not a stream.
 
-Compatibility, predictable behaviour, and clear failure modes matter more than novelty theatre.
+Thread structure, reply relationships, subject drift, and long-form readability are core product concerns rather than incidental implementation details.
 
 === Local First
 
-Messages, threading metadata, and article state should remain useful even when the network is unavailable.
+Subscriptions, read state, filters, caches, and preferences should remain understandable and useful even when the network is unavailable or unreliable.
 
-Offline reading is a core feature, not an afterthought.
+The client should not invent its own reality behind the user’s back.
 
-=== Text Over Noise
+=== Text First
 
-This project is built for people who want to read and write messages, follow threads, score content, and manage archives without algorithmic feeds, attention traps, or unnecessary chrome.
+This project is optimized for reading and writing discussion.
+
+Rich content may be handled where practical, but the software is not built around endless embeds, ornamental chrome, or attention-harvesting interface tricks.
+
+=== Modern Engineering Without Performative Complexity
+
+The project uses contemporary tools where they materially improve correctness, maintainability, or safety.
+
+Technology choices should justify themselves in the product, not merely in architecture diagrams.
+
+=== Interoperate, Do Not Cosplay Revolution
+
+This is a client for real NNTPS infrastructure.
+
+Compatibility, predictable behaviour, and clean failure modes matter more than novelty theatre.
 
 == Core Features
 
-Planned and in-progress capabilities include:
+The intended feature set includes:
 
-* NNTPS-only connections
-* standards-compliant NNTP command support
-* thread-aware article browsing
-* local caching for offline reading
-* subscription management for multiple servers
-* article scoring, filtering, and killfile-style controls
-* fast search over cached articles and headers
-* export and archival workflows
-* clean handling of modern text formats
-* support for archive-oriented NNTP use cases where practical
+* NNTPS account configuration
+* secure server connection management
+* newsgroup discovery and subscription management
+* thread tree browsing
+* article reading and composition
+* reply and follow-up workflows
+* durable read/unread tracking
+* offline-friendly local caching
+* search and filtering
+* scoring and killfile-style rules
+* attachment and content-handling policies
+* practical import/export of user configuration and state where appropriate
+* support for archive-oriented workflows where feasible
 
-The emphasis is on reliability and legibility rather than social features, recommendation engines, or protocol churn.
+The emphasis is reliability, legibility, and user trust rather than social features, recommendation engines, or protocol churn.
 
 == Non-Goals
 
-This project does not aim to be:
+This project is *not* trying to be:
 
-* a social media platform
-* a web forum clone
-* an all-purpose mail client
+* a social media client
+* a web forum clone with NNTP paint on top
+* a kitchen-sink showcase for every ecosystem standard at once
+* a protocol replacement
+* a nostalgia toy that excuses poor ergonomics
 * an insecure legacy compatibility layer
-* a speculative replacement for NNTP itself
 
 It is a reader.
 It should do that job well.
+
+== Security Model
+
+No-Nonsense NNTPS takes a narrow and explicit security stance.
+
+=== Transport
+
+* NNTPS only
+* TLS is mandatory
+* insecure NNTP is rejected by design
+
+=== Credentials
+
+Credential handling should be conservative and boring.
+
+The client should avoid vague trust boundaries, leaky abstractions, and “just put it in a config file” shortcuts. Storage, access, and transmission paths should be explicit.
+
+=== Content Handling
+
+Articles, headers, and attachments must be treated as untrusted input.
+
+Rendering and preview behaviour should aim to reduce surprises, avoid unsafe execution paths, and make policy visible to the user.
+
+=== Operational Intent
+
+The client should make the safe thing easier than the unsafe thing.
+
+== User Experience Goals
+
+A good NNTPS reader should feel:
+
+* calm rather than noisy
+* structured rather than feed-driven
+* trustworthy when dealing with state
+* efficient for keyboard-heavy or high-volume use
+* readable over long sessions
+* useful offline
+* predictable under reconnect and resync
+
+This project cares about ergonomics for serious readers, not just protocol compliance.
+
+== Project Scope
+
+No-Nonsense NNTPS focuses on the client side:
+
+* connecting to existing NNTPS servers
+* authenticating where required
+* synchronising headers and articles
+* maintaining local caches and user state
+* presenting readable, navigable threads
+* supporting practical reply and posting workflows
+
+Server implementation is out of scope for this repository.
 
 == Architecture
 
 The current implementation direction is:
 
-* *Elixir* for orchestration, connection lifecycle, and state management
-* *ReScript* for the client UI
-* *TEA-style architecture* for predictable frontend state transitions
-* optional integration with the wider hyperpolymath tooling ecosystem where it genuinely improves the software
+* *Elixir* for orchestration, protocol sessions, storage coordination, and stateful connection management
+* *GenStateMachine* for explicit connection lifecycle handling
+* *ReScript* for a type-safe client UI
+* *TEA-style state management* for predictable frontend behaviour
+* *cadre-tea-router* for route handling in web-based interfaces where applicable
 
-The architecture is intended to keep protocol logic, storage, UI state, and platform integration clearly separated.
+The architecture is intended to keep protocol logic, local state, rendering, and platform integration clearly separated.
 
-== Project Scope
-
-No-Nonsense NNTPS is focused on the client side:
-
-* connecting to existing NNTPS servers
-* synchronising headers and articles
-* maintaining local state
-* presenting readable, navigable discussion threads
-
-Server implementation is out of scope for this repository.
+The goal is a system that remains understandable under reconnects, sync edge cases, and long-lived sessions.
 
 == Hyperpolymath Ecosystem Notes
 
-This repository may use conventions common across the hyperpolymath ecosystem, including:
+No-Nonsense NNTPS is developed within the hyperpolymath ecosystem and may adopt shared repository standards, machine-readable metadata, provenance tooling, and verified components where they materially improve the software.
 
-* reproducible build and provenance practices
-* clear machine-readable project metadata
-* optional verified components where practical
-* cross-language interoperability through a stable FFI boundary when needed
+Those concerns are secondary to the central product goal: building a capable, comprehensible, secure NNTPS reader.
 
-These are implementation choices, not the primary reason the project exists.
+Project-wide standards, FFI conventions, and ecosystem integration rules should live in dedicated documentation rather than overwhelming this README.
 
-The product should remain understandable even to people who do not care about the surrounding ecosystem.
+== Status
 
-== FFI and ABI Policy
+This project is in active design and early implementation.
 
-If this project requires foreign-function boundaries, they should be small, explicit, and justified.
+Current priorities are:
 
-Preferred structure:
-
-....
-project/
-├── src/
-├── ui/
-├── native/
-├── bindings/
-└── docs/
-....
-
-Where applicable:
-
-* ABI definitions should be versioned and documented
-* generated bindings should not become the public architecture
-* native code should exist to support the client, not dominate it
-* proof-heavy or formally verified components should be used where they materially reduce risk
-
-The baseline rule is simple:
-do not introduce a foreign-function boundary unless it earns its keep.
-
-== User Experience Goals
-
-The ideal user experience is:
-
-* quick to connect
-* easy to subscribe and browse
-* pleasant for large thread trees
-* robust on unreliable networks
-* useful when offline
-* respectful of keyboard-heavy workflows
-* readable for long-form technical discussion
-
-This project should feel more like a serious reader and less like a browser tab pretending to be one.
-
-== Development Status
-
-This project is in early design and implementation.
-
-Current priorities:
-
-. establish a clean protocol core
-. define local storage and sync behaviour
-. build a usable thread and article model
-. provide a minimal working UI
-. validate against real NNTPS servers and archive-style workloads
+. establish a clean NNTPS connection model
+. define article, header, and thread data structures
+. implement durable local state
+. build a minimal thread-first UI
+. validate behaviour against real-world servers and realistic reading workflows
 
 == Roadmap
 
-=== Phase 1: Minimal Viable Reader
+=== Phase 1: Functional Core
 
-* connect to an NNTPS server
-* authenticate where required
+* connect to NNTPS servers
+* authenticate
 * list groups
-* fetch headers
-* fetch and display articles
+* subscribe and unsubscribe
+* fetch article headers and bodies
+* display threads and article views
+* basic reply and posting flow
 * persist local state
 
-=== Phase 2: Usable Daily Driver
+=== Phase 2: Daily Driver Usability
 
-* subscriptions
-* offline cache
-* thread navigation
-* scoring and filters
+* durable read-state handling
+* offline cache management
 * search
-* export/import of local state
+* scoring
+* killfiles and filtering
+* improved composition workflows
+* attachment policy controls
 
-=== Phase 3: Power-User Features
+=== Phase 3: Hardening and Scale
 
-* richer archive workflows
-* advanced filtering
-* keyboard-first navigation polish
-* better multi-server support
-* optional integrations with other hyperpolymath components
+* stronger certificate and trust handling
+* better sync behaviour under unreliable connections
+* import and export support
+* packaging and distribution
+* stress testing against large groups and deep thread trees
+* polish for keyboard-heavy workflows
 
-== Build Philosophy
+== Development
 
-This project prefers:
+Project structure may evolve, but the design intent is to keep protocol, storage, UI, and platform-specific concerns clearly separated.
 
-* small understandable components
-* explicit state machines
-* reproducible builds
-* conservative dependencies
-* clean failure handling
-* documentation that explains trade-offs rather than hiding them
+A likely high-level shape is:
+
+....
+.
+├── apps/
+│   ├── core/
+│   ├── ui/
+│   └── integration/
+├── docs/
+├── test/
+└── .machine_readable/
+....
+
+Early development commands will be documented properly once the repository layout is stabilized.
+
+For now, expect the Elixir side to provide the protocol and state core, with the ReScript side handling the client-facing interface.
 
 == Contributing
 
-Contributions are welcome, especially around:
+Contributions are welcome, especially in areas such as:
 
-* NNTP protocol correctness
-* threading and article models
-* offline storage design
-* UI ergonomics
+* NNTP/NNTPS protocol correctness
+* thread and article modelling
+* local-state and cache design
+* offline workflow ergonomics
+* filtering and scoring systems
+* safe content rendering
 * keyboard accessibility
-* archive interoperability
-* testing against real servers
+* cross-platform packaging and testing
 
-Please prefer changes that improve clarity, robustness, and interoperability over ornamental abstraction.
+Please prefer changes that improve clarity, robustness, interoperability, and user trust over speculative abstraction.
+
+== Documentation
+
+As the project matures, additional documentation should cover:
+
+* architecture and component boundaries
+* protocol support and compatibility notes
+* storage model and sync behaviour
+* security and trust decisions
+* ecosystem-specific standards and integration policy
+* development workflow and repository conventions
+
+The README should remain product-first.
 
 == License
 
-TBD.
+Add the project license here once finalized.
 
-Unless otherwise stated, this repository is expected to follow the licensing and repository-governance conventions used across the wider hyperpolymath ecosystem.
+If this repository participates in broader hyperpolymath licensing, governance, or policy overlays, document those in dedicated license and governance files rather than overloading the main introduction.
 
 == Summary
 
-No-Nonsense NNTPS is a secure, local-first NNTP reader for people who still want durable threaded discussion without feed logic, insecure defaults, or nostalgia-driven rough edges.
+No-Nonsense NNTPS is a secure, local-first NNTPS reader for people who still want durable threaded discussion without insecure defaults, feed logic, or nostalgia-driven rough edges.
 
 It is not trying to resurrect the whole old world.
 
