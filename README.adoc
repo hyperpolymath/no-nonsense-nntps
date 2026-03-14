@@ -1,118 +1,238 @@
 = No-Nonsense NNTPS
-:toc: left
+:toc:
+:toclevels: 3
 :sectnums:
 
-A modern, secure NNTPS (Network News Transfer Protocol over TLS) reader built on the hyperpolymath verified container ecosystem.
+A secure, modern NNTP reader for serious text discussion, mailing-list archives, and classic Netnews infrastructure.
 
-== Overview
+No-Nonsense NNTPS is a local-first client for reading newsgroups and NNTP-accessible archives over encrypted transport. It is designed for people who still value threaded discussion, durable archives, offline reading, and protocols that do one thing well.
 
-No-Nonsense NNTPS is a next-generation newsgroup reader designed for modern content formats while maintaining compatibility with traditional NNTP/NNTPS infrastructure. Built on formally verified components and the Vörðr security stack.
+The goal is not to reinvent Netnews.
+The goal is to make it usable, safe, and pleasant again.
 
-**Security-First:** Only supports NNTPS (secure). No insecure NNTP support by design.
+== Why This Exists
 
-**Tech Stack:**
-- Elixir (orchestration, GenStateMachine for connection management)
-- ReScript TEA + cadre-tea-router (UI)
-- Svalinn (edge gateway & auth)
-- Vörðr (container runtime)
-- Cerro Torre (provenance verification)
-- Selur (zero-copy IPC)
-- Proven library (formal verification where applicable)
+NNTP still matters in a handful of places:
 
-== ABI/FFI Standards (Hyperpolymath Universal Standard)
+* traditional Usenet and private news servers
+* mirrored mailing-list archives
+* long-lived technical discussion systems
+* text-first communities that value threading over feeds
 
-**All repos with foreign function interfaces MUST follow this standard:**
+Most existing clients are either old, awkward, or built around assumptions that no longer feel acceptable.
 
-* **ABI (Application Binary Interface)** → **Idris2** (`src/abi/*.idr`)
-** Type definitions with dependent type proofs
-** Memory layout verification
-** Platform-specific ABIs with compile-time selection
-** Formal verification of interface correctness
+No-Nonsense NNTPS is an attempt to provide:
 
-* **FFI (Foreign Function Interface)** → **Zig** (`ffi/zig/src/*.zig`)
-** C-compatible function implementations
-** Zero-cost abstractions
-** Memory-safe by default
-** Cross-compilation support
+* secure-by-default transport
+* a modern reader experience
+* strong standards compatibility
+* good offline behaviour
+* clean interoperability with existing NNTP/NNTPS systems
 
-* **Generated C Headers** → Auto-generated from Idris2 ABI (`generated/abi/*.h`)
-** Bridge between Idris2 and Zig
-** Consumed by any language via C ABI
+== Design Principles
 
-**Directory Structure:**
-----
+=== Secure by Default
+
+This client supports encrypted NNTP transport only.
+
+Plaintext NNTP is intentionally out of scope.
+If a server cannot speak secure NNTP, this client will not connect to it.
+
+=== Standards First
+
+No-Nonsense NNTPS aims to be a serious client for existing NNTP infrastructure, not a replacement protocol and not a partial toy implementation.
+
+Compatibility, predictable behaviour, and clear failure modes matter more than novelty theatre.
+
+=== Local First
+
+Messages, threading metadata, and article state should remain useful even when the network is unavailable.
+
+Offline reading is a core feature, not an afterthought.
+
+=== Text Over Noise
+
+This project is built for people who want to read and write messages, follow threads, score content, and manage archives without algorithmic feeds, attention traps, or unnecessary chrome.
+
+== Core Features
+
+Planned and in-progress capabilities include:
+
+* NNTPS-only connections
+* standards-compliant NNTP command support
+* thread-aware article browsing
+* local caching for offline reading
+* subscription management for multiple servers
+* article scoring, filtering, and killfile-style controls
+* fast search over cached articles and headers
+* export and archival workflows
+* clean handling of modern text formats
+* support for archive-oriented NNTP use cases where practical
+
+The emphasis is on reliability and legibility rather than social features, recommendation engines, or protocol churn.
+
+== Non-Goals
+
+This project does not aim to be:
+
+* a social media platform
+* a web forum clone
+* an all-purpose mail client
+* an insecure legacy compatibility layer
+* a speculative replacement for NNTP itself
+
+It is a reader.
+It should do that job well.
+
+== Architecture
+
+The current implementation direction is:
+
+* *Elixir* for orchestration, connection lifecycle, and state management
+* *ReScript* for the client UI
+* *TEA-style architecture* for predictable frontend state transitions
+* optional integration with the wider hyperpolymath tooling ecosystem where it genuinely improves the software
+
+The architecture is intended to keep protocol logic, storage, UI state, and platform integration clearly separated.
+
+== Project Scope
+
+No-Nonsense NNTPS is focused on the client side:
+
+* connecting to existing NNTPS servers
+* synchronising headers and articles
+* maintaining local state
+* presenting readable, navigable discussion threads
+
+Server implementation is out of scope for this repository.
+
+== Hyperpolymath Ecosystem Notes
+
+This repository may use conventions common across the hyperpolymath ecosystem, including:
+
+* reproducible build and provenance practices
+* clear machine-readable project metadata
+* optional verified components where practical
+* cross-language interoperability through a stable FFI boundary when needed
+
+These are implementation choices, not the primary reason the project exists.
+
+The product should remain understandable even to people who do not care about the surrounding ecosystem.
+
+== FFI and ABI Policy
+
+If this project requires foreign-function boundaries, they should be small, explicit, and justified.
+
+Preferred structure:
+
+....
 project/
-├── src/abi/          # Idris2 ABI definitions (REQUIRED)
-├── ffi/zig/          # Zig FFI implementation (REQUIRED)
-├── generated/abi/    # Auto-generated C headers
-└── bindings/         # Language-specific wrappers (optional)
-----
+├── src/
+├── ui/
+├── native/
+├── bindings/
+└── docs/
+....
 
-**See:** `ABI-FFI-README.md` for complete documentation
+Where applicable:
 
-== AI CLI standards
+* ABI definitions should be versioned and documented
+* generated bindings should not become the public architecture
+* native code should exist to support the client, not dominate it
+* proof-heavy or formally verified components should be used where they materially reduce risk
 
-- Include `ai-cli-crash-capture/` and `contractiles/` from this template in new repos.
-- Mirror 6SCM files into `.machine_readable/` (NOT `.machine_readable/6scm/`).
-- Before any code generation, check `/var/mnt/eclipse/repos/proven` for the current Idris "unbreakable" library status.
-- If a project uses that Idris library, add an *Idris Inside* badge to the repo.
-- If new bindings are required, add them in `/var/mnt/eclipse/repos/proven` as `idris2-zig-<language>` during the work.
-- If new code suggests additional "unbreakable" Idris modules, add them under `/var/mnt/eclipse/repos/proven` and update binders across all supported languages.
+The baseline rule is simple:
+do not introduce a foreign-function boundary unless it earns its keep.
 
-== Standard Dependencies
+== User Experience Goals
 
-=== Web Projects
+The ideal user experience is:
 
-ReScript web projects in the hyperpolymath ecosystem **MUST** use these formally verified components:
+* quick to connect
+* easy to subscribe and browse
+* pleasant for large thread trees
+* robust on unreliable networks
+* useful when offline
+* respectful of keyboard-heavy workflows
+* readable for long-form technical discussion
 
-[cols="1,2,1"]
-|===
-|Library |Purpose |Status
+This project should feel more like a serious reader and less like a browser tab pretending to be one.
 
-|link:https://github.com/hyperpolymath/rescript-dom-mounter[rescript-dom-mounter]
-|Formally verified DOM mounting
-|**REQUIRED**
+== Development Status
 
-|link:https://github.com/hyperpolymath/rescript-tea[rescript-tea]
-|TEA architecture framework
-|Recommended
+This project is in early design and implementation.
 
-|link:https://github.com/hyperpolymath/cadre-tea-router[cadre-tea-router]
-|Proven-safe URL routing
-|Recommended
+Current priorities:
 
-|link:https://github.com/hyperpolymath/proven[proven]
-|Idris2 formally verified library
-|Core Dependency
-|===
+. establish a clean protocol core
+. define local storage and sync behaviour
+. build a usable thread and article model
+. provide a minimal working UI
+. validate against real NNTPS servers and archive-style workloads
 
-==== Why SafeDOM is Required
+== Roadmap
 
-Traditional DOM mounting can fail:
+=== Phase 1: Minimal Viable Reader
 
-[source,javascript]
-----
-// ❌ UNSAFE: Can crash with null pointer
-const el = document.getElementById('app')
-el.innerHTML = html  // 💥
-----
+* connect to an NNTPS server
+* authenticate where required
+* list groups
+* fetch headers
+* fetch and display articles
+* persist local state
 
-SafeDOM provides **compile-time proofs** that DOM operations cannot fail:
+=== Phase 2: Usable Daily Driver
 
-[source,rescript]
-----
-// ✅ PROVEN SAFE: Mathematically guaranteed
-SafeDOM.mountSafe("#app", html,
-  ~onSuccess=el => Console.log("Success"),
-  ~onError=err => Console.error(err))
-----
+* subscriptions
+* offline cache
+* thread navigation
+* scoring and filters
+* search
+* export/import of local state
 
-**Mathematical Guarantees:**
+=== Phase 3: Power-User Features
 
-✓ No null pointer dereferences (Idris2 proof)
-✓ No invalid CSS selectors (dependent types)
-✓ No malformed HTML (balanced tag checking)
-✓ Type-safe operations (ReScript + Idris2)
-✓ Zero runtime overhead (proofs erased)
+* richer archive workflows
+* advanced filtering
+* keyboard-first navigation polish
+* better multi-server support
+* optional integrations with other hyperpolymath components
 
-See link:https://github.com/hyperpolymath/rescript-dom-mounter[rescript-dom-mounter documentation] for full details.
+== Build Philosophy
+
+This project prefers:
+
+* small understandable components
+* explicit state machines
+* reproducible builds
+* conservative dependencies
+* clean failure handling
+* documentation that explains trade-offs rather than hiding them
+
+== Contributing
+
+Contributions are welcome, especially around:
+
+* NNTP protocol correctness
+* threading and article models
+* offline storage design
+* UI ergonomics
+* keyboard accessibility
+* archive interoperability
+* testing against real servers
+
+Please prefer changes that improve clarity, robustness, and interoperability over ornamental abstraction.
+
+== License
+
+TBD.
+
+Unless otherwise stated, this repository is expected to follow the licensing and repository-governance conventions used across the wider hyperpolymath ecosystem.
+
+== Summary
+
+No-Nonsense NNTPS is a secure, local-first NNTP reader for people who still want durable threaded discussion without feed logic, insecure defaults, or nostalgia-driven rough edges.
+
+It is not trying to resurrect the whole old world.
+
+It is trying to build one good tool for the part that still matters.
