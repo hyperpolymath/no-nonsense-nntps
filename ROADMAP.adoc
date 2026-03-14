@@ -1,22 +1,263 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
-= YOUR Template Repo Roadmap
+= No-Nonsense NNTPS Roadmap
+:toc:
+:toclevels: 3
+:sectnums:
 
-== Current Status
+This document describes the planned evolution of No-Nonsense NNTPS from early protocol core to a dependable daily driver for serious threaded discussion.
 
-Initial development phase.
+The roadmap is intentionally pragmatic.
+It favors a working reader over architectural theatre.
 
-== Milestones
+== Guiding Rules
 
-=== v0.1.0 - Foundation
-* [ ] Core functionality
-* [ ] Basic documentation
-* [ ] CI/CD pipeline
+The roadmap is shaped by a few simple rules:
 
-=== v1.0.0 - Stable Release
-* [ ] Full feature set
-* [ ] Comprehensive tests
-* [ ] Production ready
+* security is a baseline, not a future enhancement
+* thread handling is core functionality, not polish
+* durable local state matters as much as network correctness
+* usability for serious readers matters more than feature count
+* implementation details must justify themselves in product behaviour
 
-== Future Directions
+== Near-Term Priorities
 
-_To be determined based on community feedback._
+The immediate focus is to establish a reader that is:
+
+* able to connect reliably to real NNTPS servers
+* able to model groups, headers, articles, and threads coherently
+* able to preserve useful local state
+* simple enough to inspect and reason about during early development
+
+== Phase 0: Foundations
+
+This phase establishes the project skeleton and the minimum viable internal model.
+
+=== Goals
+
+* define repository structure
+* establish core application boundaries
+* decide canonical data models for:
+** server accounts
+** groups
+** article headers
+** article bodies
+** thread trees
+** local read state
+* define connection lifecycle states
+* define failure and retry behaviour at a high level
+* document initial security assumptions
+
+=== Deliverables
+
+* initial project layout
+* architecture notes
+* connection state model
+* storage model draft
+* first protocol test fixtures
+* first UI wireframes or thread-view sketches
+
+=== Exit Criteria
+
+Phase 0 is complete when the project has a stable internal direction and can begin implementing the protocol core without constant structural churn.
+
+== Phase 1: Functional Core
+
+This phase builds a real, working NNTPS reader with minimal but honest capability.
+
+=== Goals
+
+* connect to NNTPS servers
+* validate and manage secure sessions
+* authenticate where required
+* list available groups
+* subscribe and unsubscribe
+* fetch headers
+* fetch article bodies
+* render threads
+* persist basic local state
+
+=== Deliverables
+
+* server configuration flow
+* connection management implementation
+* header retrieval and storage
+* article retrieval and storage
+* minimal thread-first UI
+* basic article view
+* durable subscription state
+* durable read/unread tracking
+
+=== Exit Criteria
+
+Phase 1 is complete when a user can configure an account, connect to a real server, browse groups, read threads, and return later without losing basic state.
+
+== Phase 2: Daily Driver Usability
+
+This phase focuses on making the client pleasant and trustworthy for regular use.
+
+=== Goals
+
+* improve read-state handling
+* introduce offline-friendly local cache behaviour
+* add search
+* add filtering and scoring
+* add killfile-style controls
+* improve reply and posting workflows
+* add attachment and content-handling policies
+* improve navigation for large and deep thread trees
+
+=== Deliverables
+
+* local cache policy controls
+* search across cached content
+* configurable scoring rules
+* filter and killfile system
+* composition and reply workflow improvements
+* keyboard-first navigation improvements
+* clearer sync and refresh behaviour
+* user-visible policy controls for content handling
+
+=== Exit Criteria
+
+Phase 2 is complete when the client is good enough for sustained reading, filtering, searching, and replying across real-world workloads.
+
+== Phase 3: Hardening
+
+This phase makes the client more robust under hostile reality.
+
+=== Goals
+
+* improve certificate and trust handling
+* harden reconnect and resync behaviour
+* test against large groups and deep thread trees
+* reduce state corruption risk
+* improve diagnostics without overwhelming the user
+* verify predictable behaviour under partial failure
+
+=== Deliverables
+
+* stronger certificate UX and trust decisions
+* reconnect strategy improvements
+* resync conflict handling
+* large-dataset stress testing
+* state repair or recovery tooling where appropriate
+* clearer operational logs and debugging notes for developers
+
+=== Exit Criteria
+
+Phase 3 is complete when the client behaves predictably under unreliable networks, long sessions, and messy real-world server conditions.
+
+== Phase 4: Distribution and Polish
+
+This phase focuses on packaging, documentation, and long-session ergonomics.
+
+=== Goals
+
+* package for supported platforms
+* improve installation and setup documentation
+* refine keyboard-heavy workflows
+* improve performance in large discussion spaces
+* polish interface clarity and visual calm
+* strengthen import and export support
+
+=== Deliverables
+
+* packaging and release process
+* installation documentation
+* migration and backup guidance
+* import and export support for practical user state
+* performance tuning for thread rendering and cache access
+* interface polish driven by real usage
+
+=== Exit Criteria
+
+Phase 4 is complete when the project can be installed, used, backed up, and maintained without requiring the user to think like a contributor.
+
+== Ongoing Workstreams
+
+Some work is continuous across all phases.
+
+=== Protocol Correctness
+
+The client should behave conservatively, clearly, and compatibly with real NNTPS infrastructure.
+
+This includes:
+
+* command handling
+* header and article parsing
+* edge-case behaviour
+* interoperability testing
+
+=== Security
+
+Security work is not deferred to a final pass.
+
+This includes:
+
+* transport assumptions
+* credential handling
+* certificate behaviour
+* safe content rendering
+* attachment policy design
+
+=== Local State Integrity
+
+Local-first software lives or dies by whether users trust its state model.
+
+This includes:
+
+* read/unread consistency
+* subscription correctness
+* cache lifecycle
+* recovery after interruption
+* predictable sync semantics
+
+=== User Trust
+
+The client should feel boring in the best possible way.
+
+This includes:
+
+* visible policies
+* explicit state transitions
+* comprehensible failures
+* avoidance of surprising behaviour
+
+== Things Intentionally Deferred
+
+The following may be explored later, but they are not early roadmap priorities:
+
+* experimental protocol extensions without clear user value
+* ornamental integrations that do not improve the reader
+* overbuilt plugin systems
+* speculative multi-protocol expansion
+* architecture work undertaken mainly to satisfy ecosystem aesthetics
+
+== Success Criteria
+
+The project is succeeding if it becomes:
+
+* easy to trust
+* pleasant to read with for long sessions
+* robust on unreliable networks
+* clear about its state
+* useful offline
+* effective on deep, technical, thread-heavy discussion
+
+The project is not succeeding merely because it has sophisticated internals.
+
+== Relationship to the Wider Ecosystem
+
+No-Nonsense NNTPS may adopt shared hyperpolymath conventions, metadata, and infrastructure where they genuinely improve the project.
+
+Those integrations should support the reader rather than becoming the reader’s public identity.
+
+== Summary
+
+The roadmap is simple:
+
+. build a real secure reader
+. make it pleasant to use
+. harden it against reality
+. package it so people can actually live with it
+
+Everything else is secondary.
