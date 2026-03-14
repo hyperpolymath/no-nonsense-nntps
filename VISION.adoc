@@ -1,0 +1,228 @@
+= No-Nonsense NNTPS Vision
+:toc:
+:toclevels: 3
+:sectnums:
+
+No-Nonsense NNTPS exists to build one good tool for durable threaded discussion over secure NNTP infrastructure.
+
+This is not a resurrection cult for old software.
+It is not a social network in disguise.
+It is not a protocol vanity project.
+
+It is a reader.
+
+== The Core Belief
+
+Threaded discussion is still worth taking seriously.
+
+There are still people and communities who want:
+
+* structure instead of streams
+* archives instead of churn
+* local control instead of session fragility
+* text-first discussion instead of engagement bait
+* software that behaves predictably instead of performatively
+
+No-Nonsense NNTPS is built for that world.
+
+== The Problem
+
+A great deal of modern discussion software is optimized for velocity, novelty, interruption, and platform capture.
+
+NNTP-era tools, by contrast, often still embody useful ideas:
+
+* durable message identity
+* explicit thread structure
+* archive-friendly workflows
+* composable protocols
+* local state that belongs to the user
+
+But many existing clients are difficult to recommend today because they are dated, awkward, insecure, or simply unpleasant for new users.
+
+The problem is not that the model is worthless.
+
+The problem is that the tooling often makes the model harder to love than it should be.
+
+== What This Project Wants to Preserve
+
+This project wants to preserve the good parts of the old world:
+
+* clear threading
+* long-form readability
+* stable archives
+* user-owned state
+* technical simplicity at the protocol boundary
+* calm, text-first interaction
+
+These are not quaint relics.
+They are still good ideas.
+
+== What This Project Refuses to Preserve
+
+This project does not owe loyalty to the bad parts of the old world.
+
+It does not aim to preserve:
+
+* insecure defaults
+* hostile setup flows
+* state that feels mysterious or brittle
+* ugly and exhausting reading experiences
+* “you already know how this weird thing works” assumptions
+* nostalgia as a substitute for design
+
+The old shape of a protocol does not excuse rough edges in the present.
+
+== Product Vision
+
+No-Nonsense NNTPS should become a client that feels:
+
+* calm
+* serious
+* trustworthy
+* readable
+* explicit
+* durable
+
+A user should be able to open it and feel that the software understands what it is for.
+
+It should not behave like a social feed.
+It should not feel like a browser tab with protocol decorations.
+It should not make ordinary operations feel like archaeology.
+
+== The Ideal User Experience
+
+The ideal user experience looks like this:
+
+* adding a server is straightforward
+* connection state is visible and comprehensible
+* groups are easy to browse and manage
+* threads are easy to read, collapse, expand, and follow
+* read state behaves exactly as expected
+* local caches feel useful rather than magical
+* reconnects and resyncs do not create anxiety
+* offline reading is practical
+* filters and scoring help without becoming a second job
+* the interface supports long sessions without exhausting the user
+
+The software should feel boring in the best possible way:
+steady, legible, and honest.
+
+== Security Vision
+
+Security is not an optional layer to be bolted on later.
+
+The project’s security vision is intentionally narrow:
+
+* secure transport is mandatory
+* credentials are handled conservatively
+* content is treated as untrusted input
+* trust boundaries are explicit
+* unsafe shortcuts are resisted rather than hidden behind advanced settings
+
+The software should make the safe path the natural path.
+
+== Technical Vision
+
+The internal architecture should support the product, not overshadow it.
+
+The technical vision is:
+
+* explicit state machines
+* clear component boundaries
+* durable local models
+* small understandable abstractions
+* conservative dependencies
+* tooling chosen for practical benefit rather than ceremony
+
+Where stronger verification, provenance tooling, or ecosystem standards materially improve the software, they are welcome.
+
+Where they merely make the project feel grander, they should be resisted.
+
+== Relationship to the Hyperpolymath Ecosystem
+
+No-Nonsense NNTPS belongs to the hyperpolymath ecosystem, but it should not require a reader of the README to absorb that entire universe before understanding the product.
+
+The wider ecosystem can contribute:
+
+* repository discipline
+* machine-readable metadata
+* provenance and reproducibility practices
+* shared tooling
+* verification work where practical
+
+But the product must remain legible in its own right.
+
+A user should be able to understand the project without first understanding the empire around it.
+
+== Audience
+
+This project is for people who still care about:
+
+* threaded technical discussion
+* mailing-list-like reading patterns
+* private or public NNTPS servers
+* archive-oriented workflows
+* software with explicit local state
+* keyboard-heavy or high-volume reading habits
+
+It is not for everyone.
+That is fine.
+
+A niche can still deserve excellent tools.
+
+== What Success Looks Like
+
+The project will be successful if people can honestly say:
+
+* “I trust it.”
+* “It handles threads the way a real reader should.”
+* “It stays useful when the network is flaky.”
+* “It respects my state instead of surprising me.”
+* “It makes old infrastructure feel viable without feeling old itself.”
+
+Success is not measured by hype, surface novelty, or the number of technologies named in diagrams.
+
+Success is measured by whether the software earns long-term use.
+
+== What Failure Looks Like
+
+The project will have failed if it becomes:
+
+* a showcase for internal standards with a reader attached
+* a protocol shrine instead of a practical client
+* a maze of abstractions that hides simple behaviour
+* a product that talks more about its architecture than its users
+* a tool that values purity over comfort
+* a security sermon wrapped around poor ergonomics
+
+A noble idea can still fail by becoming self-impressed.
+
+This project should not.
+
+== Long-Term Aspiration
+
+The long-term aspiration is modest and ambitious at the same time:
+
+to make one of the best serious NNTPS readers available.
+
+Not the loudest.
+Not the most theatrical.
+Not the most overengineered.
+
+Just one of the best.
+
+== Summary
+
+No-Nonsense NNTPS believes that durable, threaded, text-first discussion still deserves modern tooling.
+
+It exists to combine:
+
+* secure defaults
+* local-first behaviour
+* readable thread-oriented UX
+* careful engineering
+* respect for user trust
+
+The vision is simple:
+
+build a reader that treats old protocol infrastructure with respect, present-day users with seriousness, and needless complexity with suspicion.
