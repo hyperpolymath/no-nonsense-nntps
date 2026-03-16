@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Clade declaration — part of the gv-clade-index registry
+# See: https://github.com/hyperpolymath/gv-clade-index
+
+[identity]
+uuid = "4320a160-e91b-5205-a561-4a51391ef269"
+primary-forge = "github"
+primary-owner = "hyperpolymath"
+canonical-name = "no-nonsense-nntps"
+prefixed-name = "pt-no-nonsense-nntps"
+
+[clade]
+primary = "pt"
+secondary = []
+assigned = "2026-03-16"
+rationale = ""
+
+[forges]
+github = "hyperpolymath/no-nonsense-nntps"
+gitlab = "hyperpolymath/no-nonsense-nntps"
+bitbucket = "hyperpolymath/no-nonsense-nntps"
+
+[lineage]
+type = "standalone"
+parent = "Usenet/NNTP tooling"
+born = "2026-03-16"
