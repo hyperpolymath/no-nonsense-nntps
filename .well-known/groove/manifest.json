@@ -4,13 +4,13 @@
     "team"
   ],
   "capabilities": {
-    "primary": {
-      "description": "TODO: describe this service's primary capability",
+    "cli": {
+      "description": "Minimal, no-nonsense NNTPS newsgroup reader with TLS support.",
       "endpoint": "/api",
       "panel_compatible": true,
       "protocol": "http",
       "requires_auth": false,
-      "type": "custom"
+      "type": "cli"
     }
   },
   "consumes": [],
