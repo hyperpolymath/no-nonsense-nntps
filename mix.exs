@@ -34,7 +34,11 @@ defmodule NoNonsenseNntps.MixProject do
       {:jason, "~> 1.4"},
 
       # Telemetry and logging
-      {:telemetry, "~> 1.0"}
+      {:telemetry, "~> 1.0"},
+
+      # Testing
+      {:stream_data, "~> 1.0", only: [:dev, :test]},
+      {:benchee, "~> 1.0", only: [:dev, :test]}
     ]
   end
 
