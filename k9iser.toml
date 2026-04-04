@@ -1,0 +1,32 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
+#
+# k9iser manifest for no-nonsense-nntps
+# Minimal NNTP server implementation
+
+[project]
+name = "no-nonsense-nntps"
+safety_tier = "yard"
+
+[[source]]
+path = "mix.exs"
+type = "elixir"
+output = "generated/k9iser/elixir-manifest.k9"
+
+[[source]]
+path = "Justfile"
+type = "justfile"
+output = "generated/k9iser/justfile-recipes.k9"
+
+[[source]]
+path = ".github/workflows/hypatia-scan.yml"
+type = "workflow"
+output = "generated/k9iser/ci-security.k9"
+
+[[constraint]]
+rule = "workflows includes hypatia-scan"
+severity = "error"
+
+[[constraint]]
+rule = "services.no-nonsense-nntps.tls is enabled in production"
+severity = "warn"
