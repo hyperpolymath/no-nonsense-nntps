@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 // SPDX-FileCopyrightText: 2024-2026 Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 
 = No-Nonsense NNTPS — Show Me The Receipts
@@ -149,7 +149,7 @@ The thread assembly algorithm has a critical flaw: **it only uses the `reference
 | **Hyperpolymath Language Policy** | Elixir for backend (allowed), ReScript for UI (no TypeScript), no Node.js (Bandit instead)
 | Compliant; OTP socket API is exception for TLS native code
 
-| **PMPL-1.0-or-later License** | Primary license; all source files carry header
+| **MPL-2.0 License** | Primary license; all source files carry header
 | Declared at repo root and in every .ex file
 
 | **Local-First State** | SQLite cache per design (works offline, no server dependency)

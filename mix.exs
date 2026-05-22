@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: PMPL-1.0-or-later
+# SPDX-License-Identifier: MPL-2.0
 defmodule NoNonsenseNntps.MixProject do
   use Mix.Project
 
@@ -52,7 +52,7 @@ defmodule NoNonsenseNntps.MixProject do
   defp package do
     [
       name: "no_nonsense_nntps",
-      licenses: ["PMPL-1.0-or-later"],
+      licenses: ["MPL-2.0"],
       links: %{"GitHub" => "https://github.com/hyperpolymath/no-nonsense-nntps"},
       maintainers: ["Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>"]
     ]

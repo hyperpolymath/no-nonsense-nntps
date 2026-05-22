@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: PMPL-1.0-or-later
+# SPDX-License-Identifier: MPL-2.0
 # End-to-end tests for the NoNonsenseNntps server components.
 #
 # These tests exercise the full application stack — HTTP API, ClientManager,
