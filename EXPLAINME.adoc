@@ -172,43 +172,53 @@ The thread assembly algorithm has a critical flaw: **it only uses the `reference
 === Test TLS Enforcement
 
 1. Attempt connection to plaintext NNTP server (port 119):
-   ```bash
-   iex -S mix
-   > NoNonsenseNntps.Connection.connect("nntp.example.com", 119)
-   ** (RuntimeError) plaintext NNTP (port 119) not allowed — NNTPS required
-   ```
++
+[source,bash]
+----
+iex -S mix
+> NoNonsenseNntps.Connection.connect("nntp.example.com", 119)
+** (RuntimeError) plaintext NNTP (port 119) not allowed — NNTPS required
+----
 
 2. Attempt connection with self-signed cert (should fail unless pinned):
-   ```bash
-   > NoNonsenseNntps.Connection.connect("self-signed.local", 563)
-   ** (:tls_failed) certificate validation failed — check server cert
-   ```
++
+[source,bash]
+----
+> NoNonsenseNntps.Connection.connect("self-signed.local", 563)
+** (:tls_failed) certificate validation failed — check server cert
+----
 
 3. Successful NNTPS connection (with valid cert):
-   ```bash
-   > NoNonsenseNntps.Connection.connect("news.example.com", 563)
-   {:ok, %NoNonsenseNntps.Connection{...}}
-   ```
++
+[source,bash]
+----
+> NoNonsenseNntps.Connection.connect("news.example.com", 563)
+{:ok, %NoNonsenseNntps.Connection{...}}
+----
 
 === Test Thread Assembly
 
 1. Run test suite:
-   ```bash
-   mix test test/no_nonsense_nntps/thread_builder_test.exs
-   ```
++
+[source,bash]
+----
+mix test test/no_nonsense_nntps/thread_builder_test.exs
+----
 
 2. Observe orphan handling:
    - Articles with missing parents are marked `(orphaned)`
    - Tree still renders correctly with multiple micro-roots
 
 3. Load real newsgroup (if you have a test NNTPS server):
-   ```bash
-   iex -S mix
-   > NoNonsenseNntps.ClientManager.connect("news.example.com", 563)
-   > articles = NoNonsenseNntps.ClientManager.fetch_group("comp.lang.rust")
-   > tree = NoNonsenseNntps.ThreadBuilder.assemble(articles)
-   > Enum.map(tree, & &1.id)  # Top-level thread IDs
-   ```
++
+[source,bash]
+----
+iex -S mix
+> NoNonsenseNntps.ClientManager.connect("news.example.com", 563)
+> articles = NoNonsenseNntps.ClientManager.fetch_group("comp.lang.rust")
+> tree = NoNonsenseNntps.ThreadBuilder.assemble(articles)
+> Enum.map(tree, & &1.id)  # Top-level thread IDs
+----
 
 ---
 
