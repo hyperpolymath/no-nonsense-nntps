@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: MPL-2.0
+# Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 # End-to-end tests for the NoNonsenseNntps server components.
 #
 # These tests exercise the full application stack — HTTP API, ClientManager,

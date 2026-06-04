@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: MPL-2.0
+# Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 # StreamData property tests for NNTP protocol invariants.
 #
 # Tests verify properties that must hold for all well-formed NNTP inputs:

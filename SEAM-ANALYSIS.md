@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # Seam Analysis: Week 1 & 2 Integration Points
 
 **Purpose:** Verify all integration points between backend (Week 1) and frontend (Week 2) are properly connected.
