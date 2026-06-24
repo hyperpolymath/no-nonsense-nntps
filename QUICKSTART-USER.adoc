@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MPL-2.0
+// SPDX-License-Identifier: CC-BY-SA-4.0
 // Template: QUICKSTART-USER.adoc — 5-minute path to working software
 // Replace no-nonsense-nntps, No Nonsense Nntps — See README.adoc for details., just run, No Nonsense Nntps started successfully. with actuals
 = no-nonsense-nntps — Quick Start for Users
