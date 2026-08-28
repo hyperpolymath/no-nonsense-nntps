@@ -1,0 +1,73 @@
+// SPDX-License-Identifier: MPL-2.0
+// Ported via Harvard Engine (Semantic pass)
+
+module Router;
+
+// SPDX-License-Identifier: MPL-2.0
+
+struct route {
+  | Home
+  | Groups
+  | GroupView(string)
+  | ArticleView(string, string) // (groupName, articleId)
+
+fn parseRoute = (path: string): route => {
+  fn parts = path->String.split("/")->Array.filter(p => p != "")
+
+  switch parts {
+  | [] => Home
+  | ["groups"] => Groups
+  | ["groups", groupName] => GroupView(groupName)
+  | ["groups", groupName, "article", articleId] => ArticleView(groupName, articleId)
+  | _ => Home
+  }
+}
+
+fn routeToPath = (route: route): string => {
+  switch route {
+  | Home => "/"
+  | Groups => "/groups"
+  | GroupView(groupName) => `/groups/${groupName}`
+  | ArticleView(groupName, articleId) => `/groups/${groupName}/article/${articleId}`
+  }
+}
+
+fn push = (route: route) => {
+  fn path = routeToPath(route)
+  %raw(`window.history.pushState({}, "", path)`)
+  // Dispatch popstate event manually for push
+  %raw(`window.dispatchEvent(new PopStateEvent('popstate'))`)
+}
+
+fn replace = (route: route) => {
+  fn path = routeToPath(route)
+  %raw(`window.history.replaceState({}, "", path)`)
+}
+
+fn getCurrentRoute = (): route => {
+  fn path = %raw(`window.location.pathname`)
+  parseRoute(path)
+}
+
+fn useRouter = () => {
+  fn (route, setRoute) = React.useState(() => getCurrentRoute())
+
+  React.useEffect(() => {
+    fn handlePopState = %raw(`
+      function() {
+        return window.location.pathname
+      }
+    `)
+
+    fn listener = _evt => {
+      setRoute(_ => parseRoute(handlePopState()))
+    }
+
+    %raw(`window.addEventListener('popstate', listener)`)
+
+    Some(() => %raw(`window.removeEventListener('popstate', listener)`))
+  }, [])
+
+  (route, push)
+}
+

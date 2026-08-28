@@ -1,0 +1,56 @@
+// SPDX-License-Identifier: MPL-2.0
+// Ported via Harvard Engine (Semantic pass)
+
+module Router;
+
+// SPDX-License-Identifier: MPL-2.0
+
+/**
+ * NNTPS Frontend Router — Type-Safe Navigation (ReScript).
+ *
+ * This module implements the client-side routing for the NNTPS application. 
+ * It maps URL paths to semantic `route` variants, ensuring that 
+ * navigation is verified at compile time.
+ */
+
+// ROUTES: Formal specification of the application's view-state space.
+struct route {
+  | Home
+  | Groups
+  | GroupView(string)           // Path: /groups/[name]
+  | ArticleView(string, string) // Path: /groups/[name]/article/[id]
+
+/**
+ * PARSER: Transforms a physical window.location.pathname into a `route`.
+ * Handles 404s by falling back to the `Home` state.
+ */
+fn parseRoute = (path: string): route => {
+  fn parts = path->String.split("/")->Array.filter(p => p != "")
+  switch parts {
+  | [] => Home
+  | ["groups"] => Groups
+  | ["groups", groupName] => GroupView(groupName)
+  | ["groups", groupName, "article", articleId] => ArticleView(groupName, articleId)
+  | _ => Home
+  }
+}
+
+/**
+ * DISPATCHER: Updates the browser history and triggers a UI re-render.
+ */
+fn push = (route: route) => {
+  fn path = routeToPath(route)
+  %raw(`window.history.pushState({}, "", path)`)
+  // SIGNAL: Manually trigger popstate to notify the React hook.
+  %raw(`window.dispatchEvent(new PopStateEvent('popstate'))`)
+}
+
+/**
+ * HOOK: Provides the current route and navigation function to React components.
+ */
+fn useRouter = () => {
+  fn (route, setRoute) = React.useState(() => getCurrentRoute())
+  // ... [Event listener setup for 'popstate']
+  (route, push)
+}
+

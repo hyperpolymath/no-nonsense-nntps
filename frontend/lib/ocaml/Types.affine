@@ -1,0 +1,62 @@
+// SPDX-License-Identifier: MPL-2.0
+// Ported via Harvard Engine (Semantic pass)
+
+module Types;
+
+// SPDX-License-Identifier: MPL-2.0
+
+struct article { {
+  headers: Dict.t<string>,
+  body: string,
+}
+
+struct groupInfo { {
+  name: string,
+  high: int,
+  low: int,
+  status: string,
+}
+
+struct articleOverview { {
+  number: int,
+  subject: string,
+  from: string,
+  date: string,
+  messageId: string,
+}
+
+struct connectionStatus {
+  | Disconnected
+  | Connecting
+  | Connected(string) // host
+
+struct model { {
+  connectionStatus: connectionStatus,
+  host: string,
+  port: int,
+  groups: array<groupInfo>,
+  selectedGroup: option<string>,
+  articles: array<articleOverview>,
+  article: option<article>,
+  error: option<string>,
+  loadingGroups: bool,
+  loadingArticles: bool,
+}
+
+struct msg {
+  | UpdateHost(string)
+  | UpdatePort(string)
+  | Connect
+  | ConnectSuccess
+  | ConnectFailure(string)
+  | FetchGroups
+  | GroupsFetched(array<groupInfo>)
+  | GroupsFetchFailure(string)
+  | SelectGroup(string)
+  | GroupSelected(string, int, int, int) // name, count, first, last
+  | ArticlesFetched(array<articleOverview>)
+  | ArticlesFetchFailure(string)
+  | SelectArticle(string, string) // groupName, messageId
+  | ArticleFetched(article)
+  | FetchFailure(string)
+
