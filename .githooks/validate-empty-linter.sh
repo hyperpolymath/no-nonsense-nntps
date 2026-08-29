@@ -18,7 +18,6 @@
 #
 # Environment variables:
 #   INPUT_PATH         — Directory to scan (default: .)
-#   INPUT_STRICT       — Promote warnings to errors (default: false)
 #   INPUT_PATHS_IGNORE — Newline-separated path fragments to skip
 #
 # Exit codes:
@@ -32,10 +31,18 @@ set -euo pipefail
 # ---------------------------------------------------------------------------
 
 SCAN_PATH="${INPUT_PATH:-.}"
-STRICT="${INPUT_STRICT:-false}"
 PATHS_IGNORE_RAW="${INPUT_PATHS_IGNORE:-}"
 GITHUB_OUTPUT_FILE="${GITHUB_OUTPUT:-/dev/null}"
 GITHUB_WORKSPACE="${GITHUB_WORKSPACE:-$(pwd)}"
+TEMP_DIR="$(mktemp -d)"
+trap 'rm -rf "$TEMP_DIR"' EXIT
+
+FIXTURE_DIR="$(realpath -m "$GITHUB_WORKSPACE/tests/fixtures/empty-linter")"
+SCAN_PATH_ABS="$(realpath -m "$SCAN_PATH")"
+FIXTURE_FIND_ARGS=(-not -path '*/tests/fixtures/empty-linter/*')
+if [[ "$SCAN_PATH_ABS" == "$FIXTURE_DIR" || "$SCAN_PATH_ABS" == "$FIXTURE_DIR"/* ]]; then
+    FIXTURE_FIND_ARGS=()
+fi
 
 # Parse paths-ignore: newline-separated fragments, blank lines and # comments
 # stripped. Each fragment is a substring match against the file path.
@@ -58,7 +65,6 @@ path_ignored() {
 }
 
 # Counters
-FILES_SCANNED=0
 FILES_WITH_ISSUES=0
 
 # Track files already flagged to avoid double-counting
@@ -78,7 +84,7 @@ FILE_PATTERNS=(
 # ---------------------------------------------------------------------------
 annotate() {
     local level="$1" file="$2" message="$3"
-    local rel_path="${file#$GITHUB_WORKSPACE/}"
+    local rel_path="${file#"$GITHUB_WORKSPACE"/}"
     echo "::${level} file=${rel_path}::${message}"
 }
 
@@ -101,23 +107,35 @@ scan_pcre_patterns() {
     # - \x{feff}: zero-width no-break space / BOM
     local PATTERNS='(*UTF)[\x00-\x08\x0B\x0C\x0E-\x1F\x{a0}\x{ad}\x{200b}-\x{200f}\x{202a}-\x{202f}\x{2060}\x{2066}-\x{2069}\x{feff}]'
 
-    local pcre_results="/tmp/empty-lint-pcre-results.$$"
+    local pcre_results="$TEMP_DIR/pcre-results"
+    local files_to_check="$TEMP_DIR/pcre-files"
 
     # Run find + grep with PCRE patterns
     # -a: treat binary files as text (so NUL bytes don't cause skips)
     # -P: Perl-compatible regex
     # -l: list filenames only
-    set +e
     find "$SCAN_PATH" \
         -not -path '*/.git/*' -not -path '*/node_modules/*' \
         -not -path '*/.deno/*' -not -path '*/target/*' \
         -not -path '*/_build/*' -not -path '*/deps/*' \
         -not -path '*/external_corpora/*' -not -path '*/.lake/*' \
-        -not -path '*/tests/fixtures/empty-linter/*' \
-        -type f \( "${FILE_PATTERNS[@]}" \) \
-        -exec grep -aPl "$PATTERNS" -- {} + > "$pcre_results" 2>/dev/null
-    local pcre_exit=$?
-    set -e
+        "${FIXTURE_FIND_ARGS[@]}" \
+        -type f \( "${FILE_PATTERNS[@]}" \) -print0 > "$files_to_check"
+
+    : > "$pcre_results"
+    local filepath pcre_exit
+    while IFS= read -r -d '' filepath; do
+        if ! iconv -f UTF-8 -t UTF-8 -- "$filepath" >/dev/null 2>&1; then
+            echo "::error file=${filepath}::Invisible-character scan failed: invalid UTF-8 input"
+            return 2
+        fi
+        pcre_exit=0
+        grep -aPl "$PATTERNS" -- "$filepath" >> "$pcre_results" 2>/dev/null || pcre_exit=$?
+        if [[ "$pcre_exit" -ne 0 && "$pcre_exit" -ne 1 ]]; then
+            echo "::error file=${filepath}::PCRE invisible-character scan failed with status ${pcre_exit}"
+            return "$pcre_exit"
+        fi
+    done < "$files_to_check"
 
     local pcre_count=0
     if [[ -f "$pcre_results" ]]; then
@@ -141,7 +159,6 @@ scan_pcre_patterns() {
             annotate "warning" "$filepath" "Invisible Unicode character detected (PCRE scan: zero-width space, BOM, NBSP, C0 control, etc.)"
         done < "$pcre_results"
 
-        rm -f "$pcre_results"
     fi
 
     echo "  Found $pcre_count file(s) with invisible characters (PCRE pattern)"
@@ -171,20 +188,20 @@ scan_leading_bom() {
     # 3. A BOM at the start of a file is particularly problematic (breaks
     #    shebangs, SPDX headers, parsers expecting ASCII-clean starts)
 
-    local bom_results="/tmp/empty-lint-bom-results.$$"
+    local bom_results="$TEMP_DIR/bom-results"
 
     # Find all files to check
-    local files_to_check="/tmp/empty-lint-files-to-check.$$"
+    local files_to_check="$TEMP_DIR/bom-files"
     find "$SCAN_PATH" \
         -not -path '*/.git/*' -not -path '*/node_modules/*' \
         -not -path '*/.deno/*' -not -path '*/target/*' \
         -not -path '*/_build/*' -not -path '*/deps/*' \
         -not -path '*/external_corpora/*' -not -path '*/.lake/*' \
-        -not -path '*/tests/fixtures/empty-linter/*' \
+        "${FIXTURE_FIND_ARGS[@]}" \
         -type f \( "${FILE_PATTERNS[@]}" \) > "$files_to_check" 2>/dev/null
 
     # Check each file for leading BOM bytes
-    > "$bom_results"
+    : > "$bom_results"
     while IFS= read -r filepath; do
         [[ -z "$filepath" ]] && continue
 
@@ -252,10 +269,7 @@ scan_leading_bom() {
     local bom_count=0
     if [[ -f "$bom_results" ]]; then
         bom_count=$(wc -l < "$bom_results" 2>/dev/null || echo 0)
-        rm -f "$bom_results"
     fi
-
-    rm -f "$files_to_check"
 
     echo "  Found $bom_count file(s) with leading BOM markers (byte-wise scan)"
     echo ""
@@ -282,7 +296,7 @@ echo "────────────────────────�
 # Write outputs for GitHub Actions
 {
     echo "findings=${FILES_WITH_ISSUES}"
-    echo "exit_code=0"
+    echo "exit_code=$((FILES_WITH_ISSUES > 0 ? 1 : 0))"
     echo "ready=true"
 } >> "$GITHUB_OUTPUT_FILE" 2>/dev/null || true
 
