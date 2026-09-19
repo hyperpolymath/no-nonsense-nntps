@@ -6,7 +6,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-VALIDATOR="$REPO_ROOT/.githooks/validate-empty-linter.sh"
+VALIDATOR="$REPO_ROOT/.github/hooks/validate-empty-linter.sh"
 FIXTURES="$REPO_ROOT/tests/fixtures/empty-linter"
 TEST_TMPDIR="$(mktemp -d)"
 trap 'rm -rf "$TEST_TMPDIR"' EXIT
