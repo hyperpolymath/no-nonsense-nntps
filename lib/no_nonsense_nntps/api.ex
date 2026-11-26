@@ -35,9 +35,17 @@ defmodule NoNonsenseNntps.API do
   end
 
   post "/api/connect" do
-    %{"host" => host} = conn.body_params
-    port = Map.get(conn.body_params, "port", 563)
+    case conn.body_params do
+      %{"host" => host} when is_binary(host) ->
+        port = Map.get(conn.body_params, "port", 563)
+        do_connect(conn, host, port)
 
+      _ ->
+        send_json(conn, 400, %{error: "missing required field: host"})
+    end
+  end
+
+  defp do_connect(conn, host, port) do
     case NoNonsenseNntps.ClientManager.connect(host, port) do
       {:ok, :connected} ->
         send_json(conn, 200, %{status: "connected", host: host, port: port})

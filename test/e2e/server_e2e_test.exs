@@ -138,10 +138,9 @@ defmodule NoNonsenseNntps.ServerE2ETest do
         Plug.Test.conn(:post, "/api/connect", body)
         |> Plug.Conn.put_req_header("content-type", "application/json")
 
-      # Missing required host field — should raise or return error status.
-      assert_raise(KeyError, fn ->
-        NoNonsenseNntps.API.call(conn, NoNonsenseNntps.API.init([]))
-      end)
+      # Missing required host field is a client error, not a crash.
+      response = NoNonsenseNntps.API.call(conn, NoNonsenseNntps.API.init([]))
+      assert response.status == 400
     end
   end
 end
