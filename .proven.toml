@@ -1,0 +1,69 @@
+# SPDX-License-Identifier: MPL-2.0
+# Manifest for this repository (schema proven/manifest/v1); see
+# hyperpolymath/proven-cicd-and-workflows docs/PROVEN-ADOPTION.adoc.
+#
+# Real code: an Elixir application (mix.exs, lib/, test/) with ExUnit unit,
+# property, security-aspect and mocked end-to-end tests. Not verified locally:
+# no Elixir 1.19 toolchain was available. NOTE for the umbrella: mix.exs needs
+# `elixir: "~> 1.19"` while the umbrella default is 1.18 (and .mise.toml pins
+# 1.18.2); the gate will fail to compile until that mismatch is resolved.
+schema = "proven/manifest/v1"
+
+[languages.ignore.javascript]
+reason = "only generated ReScript build output under frontend/lib (*.res.mjs); the frontend source is AffineScript (frontend/src/*.affine) and there is no package.json"
+
+# ---- elixir ------------------------------------------------------------------
+# Unit = everything except the e2e-tagged file, so that file is run once, under p2p.
+[categories.unit.elixir]
+command = "mix test --exclude e2e"
+
+# test/no_nonsense_nntps_test.exs boots the application and checks its version.
+[categories.smoke.elixir]
+command = "mix test test/no_nonsense_nntps_test.exs"
+
+# test/e2e/server_e2e_test.exs drives the HTTP API, ClientManager and the
+# supervision tree together, with NNTP replaced by in-process mocks.
+[categories.p2p.elixir]
+command = "mix test test/e2e/server_e2e_test.exs --include e2e"
+
+# build keeps the language default (mix compile --warnings-as-errors).
+
+# ---- zig ---------------------------------------------------------------------
+# ffi/zig is the unrendered RSR template: build.zig and main.zig carry
+# {{project}} placeholders and use the removed addSharedLibrary API.
+[categories.unit.zig.waiver]
+reason = "ffi/zig is the uninstantiated template ({{project}} placeholders, removed addSharedLibrary API); it cannot build or test"
+until = "2027-01-15"
+
+[categories.smoke.zig.waiver]
+reason = "no runnable artefact; see unit"
+until = "2027-01-15"
+
+[categories.build.zig.waiver]
+reason = "ffi/zig/build.zig does not build; see unit"
+until = "2027-01-15"
+
+[categories.p2p.zig.waiver]
+reason = "no implementation to test across a seam; see unit"
+until = "2027-01-15"
+
+# ---- shell -------------------------------------------------------------------
+# tests/test-empty-linter.sh runs the empty-linter hook against fixtures
+# (passes locally).
+[categories.unit.shell]
+command = "bash tests/test-empty-linter.sh"
+
+[categories.smoke.shell]
+na = "shell is hook/setup tooling only; the application smoke test is declared under elixir"
+
+[categories.build.shell]
+na = "interpreted scripts, nothing to compile"
+
+[categories.p2p.shell]
+na = "hook scripts are independent with no inter-component seam; the application seam is declared under elixir"
+
+# ---- bench -------------------------------------------------------------------
+# Benchee run of the Plug pipeline, no live NNTP needed. Not verified locally.
+[bench.api_pipeline]
+command = "mix run bench/server_bench.exs"
+baselining = true
