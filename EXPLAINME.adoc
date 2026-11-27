@@ -146,7 +146,7 @@ The thread assembly algorithm has a critical flaw: **it only uses the `reference
 | **ABI/FFI (Idris2 + Zig)** | Message parsing (RFC 5536 header parsing) will use proven Idris2 parser
 | Planned: Phase 2 integration with proven-parsers crate
 
-| **Hyperpolymath Language Policy** | Elixir for backend (allowed), ReScript for UI (no TypeScript), no Node.js (Bandit instead)
+| **Hyperpolymath Language Policy** | Elixir for backend (allowed), AffineScript for UI (no TypeScript), no Node.js (Bandit instead)
 | Compliant; OTP socket API is exception for TLS native code
 
 | **MPL-2.0 License** | Primary license; all source files carry header
