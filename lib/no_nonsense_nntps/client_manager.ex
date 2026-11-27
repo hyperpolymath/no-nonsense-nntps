@@ -21,6 +21,10 @@ defmodule NoNonsenseNntps.ClientManager do
 
   @client_name :nntps_client
 
+  def start_link(_opts \\ []) do
+    GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
+  end
+
   # --- CLIENT API ---
 
   @doc """
@@ -39,6 +43,9 @@ defmodule NoNonsenseNntps.ClientManager do
   end
 
   # --- SERVER CALLBACKS ---
+
+  @impl true
+  def init(:ok), do: {:ok, %{client_pid: nil, host: nil, port: nil}}
 
   @impl true
   def handle_call({:connect, host, port}, _from, state) do
